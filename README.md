@@ -58,7 +58,14 @@ Set `disable-model-invocation: true` when the skill should load only if named ex
 | Skill | Purpose |
 |-------|---------|
 | [ai-writing](ai-writing/) | Avoid common LLM writing tells in docs, READMEs, copy and other prose |
+| [fecfile](fecfile/) | Analyze FEC campaign finance filings (contributions, disbursements, committees) |
+| [gis-datasets](gis-datasets/) | Defaults for stilesdata.com/gis and la-geography layers |
+| [graphics-style](graphics-style/) | Chart and map design standards (Roboto charts, chorokit / Barlow maps) |
+| [hangarbay](hangarbay/) | Query FAA aircraft registry by N-number, owner or fleet |
 | [jupyter-notebook](jupyter-notebook/) | Scaffold JupyterLab notebooks with uv, live fetches and the `_template` layout |
+| [stock-market](stock-market/) | Fetch stock prices, indices, commodities, Fear & Greed and economic indicators |
+| [streetview-dl](streetview-dl/) | Download Google Street View panoramas from Maps URLs |
+| [weather-forecast](weather-forecast/) | Fetch 7-day forecasts from Open-Meteo (coordinates then forecast) |
 
 ## Creating a skill
 
