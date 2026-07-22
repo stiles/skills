@@ -58,6 +58,7 @@ Set `disable-model-invocation: true` when the skill should load only if named ex
 | Skill | Purpose |
 |-------|---------|
 | [ai-writing](ai-writing/) | Avoid common LLM writing tells in docs, READMEs, copy and other prose |
+| [jupyter-notebook](jupyter-notebook/) | Scaffold JupyterLab notebooks with uv, live fetches and the `_template` layout |
 
 ## Creating a skill
 
