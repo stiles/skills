@@ -3,9 +3,11 @@
 Companion to [SKILL.md](SKILL.md). Use the defaults tables there first.
 
 - National: `https://stilesdata.com/gis/<filename>` ↔ `s3://stilesdata.com/gis/<filename>`
+- Korea: `https://stilesdata.com/gis/korea/<filename>` ↔ `s3://stilesdata.com/gis/korea/<filename>`
 - Los Angeles: `https://stilesdata.com/la-geography/<filename>` ↔ `s3://stilesdata.com/la-geography/<filename>`
 
-Source of truth for LA layer names and upstream feeds: `~/code/la-geography/config/layers.yml`.
+Source of truth for LA layer names: `~/code/la-geography/config/layers.yml`.  
+Korea processing / admin glossary: `~/code/korea-geography`.
 
 ## National defaults (repeat)
 
@@ -98,6 +100,42 @@ Source of truth for LA layer names and upstream feeds: `~/code/la-geography/conf
 - `*_esri_simple*` → good general-purpose geometries
 - `*_demos_generations*` → Esri demographic / generation attributes; FIPS often in `ID`
 - `*_cnn*` → legacy; prefer Esri simples for new maps
+
+## Korea
+
+Prefix: `https://stilesdata.com/gis/korea/`. Built in `~/code/korea-geography` from NGII (Korean Geographic Information Institute) bilingual layers, plus GADM/Esri-derived outlines. Filenames ending in `_combined` merge English and Korean attribute fields onto one GeoJSON.
+
+### Korea defaults
+
+| Role | File |
+|------|------|
+| Peninsula outline | `unified_korea_boundary.geojson` |
+| Admin polygons | `administrative_boundaries_combined.geojson` |
+| DMZ | `demilitarized_zone_combined.geojson` |
+| Place labels | `place_names_combined.geojson` |
+
+### Full Korea layer list
+
+| File | ~Size | Geometry | Features | Key name fields |
+|------|-------|----------|----------|-----------------|
+| `unified_korea_boundary.geojson` | 0.6 MiB | MultiPolygon | 3 | `COUNTRY_1` / `COUNTRY_2` (GADM-style) |
+| `administrative_boundaries_combined.geojson` | 67 MiB | Polygon | ~9933 | `MNG_NAM_eng`, `MNG_NAM_kor`, `MNG_ARA_*` |
+| `national_boundaries_combined.geojson` | 7 MiB | Polygon | ~2933 | `NAT_NAM_eng`, `NAT_NAM_kor` |
+| `demilitarized_zone_combined.geojson` | 47 KiB | LineString | 1 | `DMZ_LEN_eng` / `_kor` |
+| `coastal_lines_combined.geojson` | 9 MiB | LineString | ~3081 | `COD_LEN_*` |
+| `rivers_combined.geojson` | 14 MiB | LineString | ~1204 | `RIV_NAM_eng`, `RIV_NAM_kor` |
+| `roads_combined.geojson` | 23 MiB | LineString | ~1302 | `ROD_NAM_eng`, `ROD_NAM_kor` |
+| `railways_combined.geojson` | 21 MiB | LineString | ~729 | `RAL_NAM_eng`, `RAL_NAM_kor` |
+| `place_names_combined.geojson` | 0.3 MiB | Point | ~1352 | `KOR_NAM_eng`, `KOR_NAM_kor` |
+| `premier_points_combined.geojson` | 0.5 MiB | Point | ~2070 | `MNG_NAM_eng`, `MNG_NAM_kor` |
+| `mountain_peaks_combined.geojson` | 55 KiB | Point | ~181 | `MOT_NAM_*`, `MOT_HIG_*` |
+| `cultural_locations_combined.geojson` | 15 KiB | Point | ~57 | `CUL_NAM_eng`, `CUL_NAM_kor` |
+| `ocean_points_combined.geojson` | 9 KiB | Point | ~31 | `OCN_NAM_eng`, `OCN_NAM_kor` |
+| `latitude_longitude_lines_combined.geojson` | 95 KiB | LineString | ~22 | `LAT_NAM_*` |
+
+Cache `administrative_boundaries_combined`, `roads_combined` and `railways_combined` before interactive notebook use.
+
+South / North admin vocabulary (도, 시, 구, 군, 동, etc.) is summarized in `~/code/korea-geography/README.md`.
 
 ## LA geography
 

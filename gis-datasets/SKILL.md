@@ -1,28 +1,31 @@
 ---
 name: gis-datasets
 description: >-
-  Choose and load GIS files from stilesdata.com/gis (US national) and
-  stilesdata.com/la-geography (Los Angeles). Use when picking states, counties,
-  cities, hex grids, tracts, ZIPs, LA neighborhoods, LAPD/LAFD boundaries,
-  Metro lines or Census-apportioned demographics; joining on FIPS or layer ids;
-  or reading GeoJSON/Parquet from S3 / HTTPS.
+  Choose and load GIS files from stilesdata.com/gis (US national),
+  stilesdata.com/gis/korea (Korea) and stilesdata.com/la-geography (Los Angeles).
+  Use when picking states, counties, cities, hex grids, tracts, ZIPs, Korea
+  admin/DMZ/roads, LA neighborhoods, LAPD/LAFD boundaries, Metro lines or
+  Census-apportioned demographics; joining on FIPS or layer ids; or reading
+  GeoJSON/Parquet from S3 / HTTPS.
 metadata:
-  short-description: National and LA GIS defaults on stilesdata.com
+  short-description: US, LA and Korea GIS defaults on stilesdata.com
 ---
 
 # GIS assets
 
-Two public prefixes on the same bucket (`s3://stilesdata.com/`):
+Public prefixes on the same bucket (`s3://stilesdata.com/`):
 
 | Prefix | HTTPS base | Use for |
 |--------|------------|---------|
 | `gis/` | `https://stilesdata.com/gis/` | US states, counties, cities, outlines, hex grids, tracts, ZIPs |
+| `gis/korea/` | `https://stilesdata.com/gis/korea/` | Korean peninsula boundaries, admin, DMZ, hydro, roads, places |
 | `la-geography/` | `https://stilesdata.com/la-geography/` | LA city/county boundaries, neighborhoods, police/fire, transit, demos |
 
 Prefer **live HTTPS URLs**. Cache large files locally when needed. Prefer **HTTPS** over `http://`.
 
-- National specialty / legacy inventory: [reference.md](reference.md)
-- LA layer definitions and upstream sources live in `~/code/la-geography` (`config/layers.yml`, README)
+- Full specialty / legacy inventory: [reference.md](reference.md)
+- LA sources: `~/code/la-geography` (`config/layers.yml`, README)
+- Korea sources / processing: `~/code/korea-geography` (NGII + GADM + Esri; README)
 
 ## How to load
 
@@ -42,6 +45,7 @@ demos = pd.read_parquet(
 
 ```bash
 aws s3 ls s3://stilesdata.com/gis/
+aws s3 ls s3://stilesdata.com/gis/korea/
 aws s3 ls s3://stilesdata.com/la-geography/
 ```
 
@@ -110,6 +114,41 @@ Example: `lapd_divisions_demographics.parquet`. Join back to the GeoJSON on the 
 ### Other LA layers (same prefix)
 
 Also published: city parks; county school districts; LACoFD / LAFD station boundaries and locations; LAPD station locations; county airports and noise contours; election precincts. Full list and upstream ArcGIS URLs: `~/code/la-geography/config/layers.yml` and [reference.md](reference.md#la-geography).
+
+## Korea defaults (`gis/korea/`)
+
+Combined peninsula layers from `~/code/korea-geography` (NGII features with English + Korean name fields where available; GADM unified outline).
+
+| Need | File | Notes |
+|------|------|-------|
+| Peninsula outline | `unified_korea_boundary.geojson` | **Start here for a basemap mask.** ~0.6 MiB; MultiPolygon. |
+| Admin boundaries | `administrative_boundaries_combined.geojson` | ~9.9k polygons; `MNG_NAM_eng` / `MNG_NAM_kor`. **~67 MiB — cache it.** |
+| National boundary pieces | `national_boundaries_combined.geojson` | ~2.9k polygons; `NAT_NAM_eng` / `NAT_NAM_kor`. ~7 MiB. |
+| DMZ | `demilitarized_zone_combined.geojson` | LineString; tiny. |
+| Place names | `place_names_combined.geojson` | ~1.3k points; `KOR_NAM_eng` / `KOR_NAM_kor`. |
+| Premier points | `premier_points_combined.geojson` | ~2k points; `MNG_NAM_eng` / `MNG_NAM_kor`. |
+| Mountain peaks | `mountain_peaks_combined.geojson` | ~181 points; name + height eng/kor. |
+| Roads | `roads_combined.geojson` | ~1.3k lines; ~23 MiB. |
+| Railways | `railways_combined.geojson` | ~729 lines; ~21 MiB. |
+| Rivers | `rivers_combined.geojson` | ~1.2k lines; ~14 MiB. |
+| Coastline | `coastal_lines_combined.geojson` | ~3k lines; ~9 MiB. |
+
+URL: `https://stilesdata.com/gis/korea/<filename>`.
+
+```python
+korea = gpd.read_file(
+    "https://stilesdata.com/gis/korea/unified_korea_boundary.geojson"
+)
+dmz = gpd.read_file(
+    "https://stilesdata.com/gis/korea/demilitarized_zone_combined.geojson"
+)
+```
+
+Also on the prefix (usually overlays, not basemaps): `cultural_locations_combined.geojson`, `ocean_points_combined.geojson`, `latitude_longitude_lines_combined.geojson`. Full sizes and geometry notes: [reference.md](reference.md#korea).
+
+Bilingual attribute pattern on NGII-derived layers: `*_eng` / `*_kor` pairs (for example `ROD_NAM_eng` / `ROD_NAM_kor`). Prefer English columns for labels unless the map needs Hangul.
+
+Dokdo/Takeshima and East Sea / Sea of Japan naming appear in source data for geographic completeness; inclusion is not a political stance (see the korea-geography README).
 
 ## Which national file when
 

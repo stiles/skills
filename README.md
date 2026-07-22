@@ -59,7 +59,7 @@ Set `disable-model-invocation: true` when the skill should load only if named ex
 |-------|---------|
 | [ai-writing](ai-writing/) | Avoid common LLM writing tells in docs, READMEs, copy and other prose |
 | [fecfile](fecfile/) | Analyze FEC campaign finance filings (contributions, disbursements, committees) |
-| [gis-datasets](gis-datasets/) | Defaults for stilesdata.com/gis and la-geography layers |
+| [gis-datasets](gis-datasets/) | Defaults for stilesdata.com/gis, gis/korea and la-geography layers |
 | [graphics-style](graphics-style/) | Chart and map design standards (Roboto charts, chorokit / Barlow maps) |
 | [hangarbay](hangarbay/) | Query FAA aircraft registry by N-number, owner or fleet |
 | [jupyter-notebook](jupyter-notebook/) | Scaffold JupyterLab notebooks with uv, live fetches and the `_template` layout |
