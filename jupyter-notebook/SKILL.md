@@ -87,12 +87,11 @@ Include only imports the notebook uses. Keep a browser-like `headers` dict in Fe
 - Hard-code the source URL (or clearly documented API endpoint) in the Fetch section so anyone can re-run.
 - When credentials are required, load them from an ignored local file (for example `creds.py` / `credentials.json`); never commit secrets.
 - If a local download is unavoidable, document why, keep the fetch cell that produced it and treat `data/raw/` as a cache—not the source of truth.
-- Exports use the run date: `data/processed/NAME_{today}.csv` (same pattern for `.json` / `.geojson`).
+- Export a copy with the run date (if needed): `data/processed/NAME_{today}.csv` (same pattern for `.json` / `.geojson`).
 
 ```python
-# df.to_csv(f"data/processed/NAME_{today}.csv", index=False)
+# df.to_json(f"data/processed/NAME.json", indent=4, orient="records")
 # df.to_json(f"data/processed/NAME_{today}.json", indent=4, orient="records")
-# gdf.to_file(f"data/processed/NAME_{today}.geojson", driver="GeoJSON")
 ```
 
 ## Charts
